@@ -1,0 +1,48 @@
+<div class="daily-schedule">
+	<div class="email-container" *ngIf="canPrint">
+		<button mat-button [matMenuTriggerFor]="mnuSend">
+			<mat-icon color="primary" aria-label="Send Schedules">mail_outline</mat-icon>
+			<span>Send Schedules</span>
+		</button>
+		<mat-menu #mnuSend="matMenu">
+			<button mat-menu-item (click)="sendSchedules(false)">Email</button>
+			<button mat-menu-item (click)="sendSchedules(true)">Text Message</button>
+		</mat-menu>
+	</div>
+	<div style="display:flex">
+		<button class="mat-small-button" mat-icon-button (click)='previous()'>
+			<mat-icon color="primary" aria-label="Previous">navigate_before</mat-icon>
+		</button>
+		<div style="width:180px;text-align:center">
+			{{dateFormatted}}
+		</div>
+		<button class="mat-small-button" mat-icon-button (click)='next()'>
+			<mat-icon color="primary" aria-label="Next">navigate_next</mat-icon>
+		</button>
+		<br />
+		<br />
+	</div>
+	<div style="height:calc(100vh - 155px);width: 100%">
+		<table *ngIf="dailySchedules && dailySchedules.length > 0">
+			<tr>
+				<th style="width:12%; border: 1px solid"></th>
+				<th *ngFor="let h of hours" colspan="4" style="width: 3%;border: 1px solid">{{h == 0 ? '12a' : (h == 12 ? '12p' : (h > 12 ? (h % 12) + 'p' : h + 'a'))}}</th>
+			</tr>
+			<tr *ngFor="let s of dailySchedules">
+				<td style="border: 1px solid">
+					<strong>{{s.user ? s.user['displayName'] : 'Unassigned'}}</strong>
+					<div>
+						{{s.scheduleTime}}
+					</div>
+				</td>
+				<td *ngFor="let h of s.quarterHours" [attr.colspan]="s.startIncrement == h ? s.colspan : 1" [style.backgroundColor]="s.startIncrement == h ? s.color : ''"
+					[ngClass]="s.startIncrement == h ? 'active' : 'increment_' + (h % 4)" [style.color]="'white'">
+					<div *ngIf="s.startIncrement == h && s.description" style="text-align: center;max-height:29px;overflow:hidden;text-overflow:ellipsis">
+						<strong>{{s.description}}</strong>
+					</div>
+				 </td>
+			</tr>
+		</table>
+	</div>
+	<overlay [loading]="loading"></overlay>
+</div>

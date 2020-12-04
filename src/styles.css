@@ -1,0 +1,279 @@
+@import 'ngx-toastr/toastr.css';
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import 'pajama-angular/assets/css/styles.css';
+
+body {
+	margin: 0px;
+	font-size: 14px;
+	font-family: 'Cera Medium', 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+th {
+	text-align: inherit;
+}
+
+.full-width {
+	width: 100%;
+}
+
+.error-message {
+	color: red;
+	font-weight: bold;
+}
+
+.button-container {
+	width: 100%;
+	text-align: right;
+}
+
+.grid-add-button {
+	float: right;
+}
+
+.tab-content {
+	width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.btn-link {
+	background-color: transparent !important;
+    border: 0 !important;
+	padding: 0px !important;
+	line-height: 16px !important;
+	height: 16px !important;
+	vertical-align: inherit;
+	font-size: 14px !important;
+	color: #0000EE;
+	cursor: pointer;
+}
+
+.fc-content, .fc-day, .fc-day-top {
+    cursor: pointer;
+}
+
+.checklist-dropdown {
+	z-index: 1000 !important;
+}
+
+.mat-small-button {
+	height: 27px !important;
+    line-height: 27px !important;
+}
+
+
+.mat-x-small-button {
+	height: 23px !important;
+    line-height: 23px !important;
+}
+
+.mat-xx-small-button {
+	height: 20px !important;
+    line-height: 20px !important;
+}
+
+.layout-fixed table {
+	table-layout:fixed;
+}
+
+.status-red {
+	background-color: red;
+	color: white;
+}
+
+/* TODO: move to shared */
+gridview table {
+	border-collapse: inherit;
+}
+gridview td {
+	vertical-align: top;
+}
+
+.hidden-column div, .hide-me button, .hide-row {
+	display: none;
+}
+
+.font-bold-italic {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.entries gridview .header-button {
+	display: none;
+}
+
+gridview-cell select, gridview-cell .checklist-button {
+	height: 20.51px !important;
+}
+
+gridview-cell .checklist-button-image {
+	top: 6px !important;
+}
+
+.checklist-button {
+	height: 25px !important;
+}
+
+.checklist-button-image {
+	top: 8px !important;
+}
+
+
+.statuses-cell {
+	padding: 0px !important;
+}
+
+.small-container {
+	max-width: 1280px;
+	margin: auto;
+}
+
+.mat-menu-item {
+	font-size: 14px;
+	line-height: 32px !important;
+	height: 32px !important;
+}
+
+.header {
+	font-size: 17px;
+    margin-bottom: 15px;
+}
+
+/* TODO: remove on next PJ build */
+.prompt-confirm-td {
+	text-align: right !important;
+}
+
+/* TODO: move to shared */
+.dropdown-top .checklist-dropdown {
+    bottom: 0;
+    margin-bottom: 25px;
+}
+
+.copyright {
+	bottom: 0px;
+    position: absolute;
+    text-align: center;
+	font-size: 11px;
+	margin: auto;
+}
+
+.mat-tab-label {
+    height: 30px;
+    font-size: 11px;
+    min-width: 50px;
+}
+
+.mat-icon-small {
+	height: 21px !important;
+    width: 21px !important;
+    font-size: 21px !important;
+}
+
+/* TODO: share */
+.modal-dialog-content {
+	padding: 20px;
+	border-bottom: 1px solid #ddd;
+}
+.modal-dialog-container {
+	width: 90%;
+	max-width: 800px;
+}
+.modal-dialog-header {
+    background-color: transparent !important;
+    height: 34px !important;
+	padding: 10px 15px !important;
+	font: 500 20px/32px Roboto,Helvetica Neue,sans-serif !important;
+	font-weight: normal !important;
+}
+.modal-dialog-footer button {
+    box-sizing: border-box;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: 0;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align: baseline;
+    text-align: center;
+    margin: 0;
+    min-width: 88px;
+    line-height: 36px;
+    padding: 0 16px;
+	border-radius: 2px;
+	font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-size: 14px;
+	font-weight: 500;
+	box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+	color: #fff;
+	border: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+.modal-dialog-footer button:nth-child(1) {
+	background-color: #673ab7;
+}
+.modal-dialog-footer button:nth-child(2) {
+	margin-left: 10px;
+	background-color: #f44336;
+}
+
+input {
+	height: 19px;
+}
+
+gridview-cell input {
+	height: 15px;
+}
+
+.input-button-container {
+    top: -23px !important;
+}
+
+gridview-cell .input-button-container {
+    top: -21px !important;
+}
+
+/* shared */
+.overlay-content img {
+	vertical-align: middle;
+}
+
+detail-gridview table {
+	margin-bottom:20px;
+}
+
+/* TODO: stick in shared angular */
+.textarea-column {
+	padding-right: 10px !important;
+}
+
+.checkbox-label {
+	display: block;
+	padding-left: 15px;
+	text-indent: -15px;
+}
+.checkbox-input {
+	width: 13px;
+	height: 13px;
+	padding: 0;
+	margin:0;
+	vertical-align: bottom;
+	position: relative;
+	top: -1px;
+	*overflow: hidden;
+}
+
+.gridview-settings {
+	display: none;
+}

@@ -1,0 +1,4 @@
+<div class="small-container">
+	<div class="header">Available Extra Duties</div>
+	<gridview-container #gridEntriesContainer [grid]="gridEntries" (refreshGrid)="refreshGrid()" [loading]="loading" [hideButtons]="!canEdit"></gridview-container>
+</div>

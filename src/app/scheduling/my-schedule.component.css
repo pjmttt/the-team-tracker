@@ -1,0 +1,58 @@
+table {
+	width: 100%;
+	font-size: 12px;
+	margin-bottom: 50px
+}
+
+th, td {
+	table-layout: fixed;
+	height: 22px;
+}
+
+td {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+}
+
+th {
+	border: 1px solid #dddddd;
+	padding-left: 6px;
+}
+
+
+.scheduled-item {
+	height:100%;
+	width:98%;
+	margin:auto;
+	color: white;
+	padding-left: 6px;
+	white-space: nowrap;
+    text-overflow: ellipsis;
+	overflow: hidden;
+	font-size: 11px;
+}
+
+.even-item {
+	border-top: 1px solid #dddddd;
+}
+
+.odd-item {
+	border-top: 1px dotted #dddddd;
+}
+
+tr:last-child {
+	border-bottom: 1px solid #dddddd;
+}
+
+.email-container {
+	float: right;
+	cursor: pointer;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.email-container span {
+	vertical-align: top;
+}

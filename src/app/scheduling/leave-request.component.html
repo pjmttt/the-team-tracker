@@ -1,0 +1,62 @@
+<div class="modal-dialog-content">
+	<form #form="ngForm" autocomplete="off">
+		<div fxLayout="row" fxLayoutGap="15px">
+			<label>
+				<input name="scheduleType" type="radio" [(ngModel)]="scheduleType" [value]="0" />&nbsp;&nbsp;Single Day</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>
+				<input name="scheduleType" type="radio" [(ngModel)]="scheduleType" [value]="1" />&nbsp;&nbsp;Multi Day</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>
+				<input name="scheduleType" type="radio" [(ngModel)]="scheduleType" [value]="2" />&nbsp;&nbsp;Partial Day</label>
+		</div>
+		<br />
+		<div fxLayout="row" fxLayoutGap="15px" *ngIf="!forUser && lookups">
+			<div fxFlex="50%" fxFlex.lt-sm="100%">
+				<mat-form-field class="full-width">
+					<input name="employee" matInput type="text" placeholder="Employee" typeahead [dataSource]="lookups.users" [(ngModel)]="userId"
+					 displayMember="displayName" valueMember="userId" required popupHeight="330px" />
+				</mat-form-field>
+			</div>
+		</div>
+		<div fxLayout="row" fxLayoutGap="15px">
+			<div fxFlex="50%" fxFlex.lt-sm="100%">
+				<mat-form-field class="full-width">
+					<input name="startDate" type="text" dateTimePicker [hideTime]="true" matInput aria-label="Date" required placeholder="Date"
+					 [(ngModel)]="startDate" />
+				</mat-form-field>
+			</div>
+			<div fxFlex="50%" fxFlex.lt-sm="100%" *ngIf="scheduleType == 1">
+				<mat-form-field class="full-width">
+					<input name="endDate" type="text" dateTimePicker [hideTime]="true" matInput aria-label="End" required placeholder="End" [(ngModel)]="endDate"
+					/>
+				</mat-form-field>
+			</div>
+			<div fxFlex="25%" fxFlex.lt-sm="50%" *ngIf="scheduleType == 2">
+				<mat-form-field class="full-width">
+					<input name="startTime" type="text" dateTimePicker [hideDate]="true" matInput aria-label="Start Time" required placeholder="Start Time"
+					 [(ngModel)]="startTime" />
+				</mat-form-field>
+			</div>
+			<div fxFlex="25%" fxFlex.lt-sm="50%" *ngIf="scheduleType == 2">
+				<mat-form-field class="full-width">
+					<input name="endTime" type="text" dateTimePicker [hideDate]="true" matInput aria-label="End Time" required placeholder="End Time"
+					 [(ngModel)]="endTime" />
+				</mat-form-field>
+			</div>
+		</div>
+		<br />
+		<div fxLayout="row">
+			<mat-form-field class="full-width">
+				<textarea name="reason" matInput placeholder="Reason" rows="9" [(ngModel)]="reason"></textarea>
+			</mat-form-field>
+		</div>
+		<br />
+		<div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end">
+			<img *ngIf="loading" style='width:35px;height:35px' src="data:image/gif;base64,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"
+			/>
+			<button mat-raised-button color="primary" (click)="save()" *ngIf="!loading">Save</button>
+			<button mat-raised-button color="warn" (click)="leaveRequestModal.hide()" *ngIf="!loading">Cancel</button>
+		</div>
+	</form>
+</div>

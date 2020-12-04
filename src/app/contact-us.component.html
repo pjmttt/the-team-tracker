@@ -1,0 +1,15 @@
+<div class="small-container">
+	<h2>The Team Tracker</h2>
+	<div fxLayout="row">
+		<div fxFlex="100%">
+			Message:
+			<ckeditor [(ngModel)]="message" *ngIf="!configService.isMobile"></ckeditor>
+			<textarea [(ngModel)]="message" *ngIf="configService.isMobile" rows="6" style="width: 100%"></textarea>
+		</div>
+	</div>
+	<br />
+	<div fxLayoutAlign="end">
+		<button mat-raised-button color="primary" (click)="send()">Send</button>
+	</div>
+</div>
+<overlay [loading]="loading"></overlay>

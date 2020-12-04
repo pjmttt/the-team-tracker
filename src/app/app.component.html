@@ -1,0 +1,236 @@
+<mat-toolbar style="position:fixed;top: 0px;z-index: 1" [style.backgroundColor]="development ? '#800020' : ''">
+	<mat-toolbar-row>
+		<span *ngIf="loggedInUser" style="cursor:pointer" [routerLink]="['/']">
+			<img src="images/logo.png" style="height: 58px;margin-top: 7px;" />
+		</span>
+		<span *ngIf="!loggedInUser" style="cursor:pointer" [routerLink]="['/']">
+			<img src="images/logofull.png" style="height: 58px;margin-top: 7px;" fxHide fxShow.gt-xs />
+			<img src="images/logo.png" style="height: 58px;margin-top: 7px;" fxShow fxHide.gt-xs />
+		</span>
+		<button *ngIf="loggedInUser" class="mat-small-button" mat-icon-button (click)='sidenav.toggle()' fxShow fxHide.gt-md>
+			<mat-icon aria-label="Menu">menu</mat-icon>
+		</button>
+		<div class="header-menu" id="navbarSupportedContent" *ngIf="loggedInUser && !hasExpired" fxHide fxShow.gt-md>
+			<button mat-button *ngIf="hasModule(module.DUTIES.value)" [matMenuTriggerFor]="mnuEntries">Duties</button>
+			<button mat-button *ngIf="hasModule(module.DUTIES.value) || hasModule(module.SCHEDULING.value)" [matMenuTriggerFor]="mnuAttendance">Attendance</button>
+			<button mat-button *ngIf="hasModule(module.SCHEDULING.value)" [matMenuTriggerFor]="mnuSchedule">Scheduling</button>
+			<button mat-button *ngIf="hasModule(module.INVENTORY.value) && hasRole(role.INVENTORY.value)" [routerLink]="['/inventoryitems']">Inventory</button>
+			<button mat-button *ngIf="hasModule(module.MAINTENANCE_REQUESTS.value) && (hasRole(role.MANAGER.value) || hasRole(role.MAINTENANCE_REQUESTS.value))" [routerLink]="['/maintenancerequests']">Maintenance</button>
+			<button mat-button [routerLink]="['/documents']">Documents</button>
+			<button mat-button [matMenuTriggerFor]="mnuConnect">Connect</button>
+			<button mat-button [matMenuTriggerFor]="mnuSetup">Setup</button>
+			<button mat-button [routerLink]="['/contactus']">Contact Us</button>
+		</div>
+		<span class="nav-spacer"></span>
+		<span *ngIf="loggedInUser" class="nav-user">{{loggedInUser.user.displayName}} ({{loggedInUser.user.runningScore || 0}} points)</span>
+		<div *ngIf="loggedInUser" class="nav-user" fxHide fxShow.gt-xs>
+			&nbsp;&nbsp;&nbsp;|&nbsp;
+			<button mat-button (click)="clockInOut()" *ngIf="!loggedInUser.user.clockedIn">Clock In</button>
+			<button mat-button (click)="clockInOut()" *ngIf="loggedInUser.user.clockedIn">Clock Out</button>
+			&nbsp;|&nbsp;
+			<button mat-button (click)="logout()">Logout</button>
+		</div>
+		<div *ngIf="!loggedInUser" class="nav-login">
+			<button mat-button [routerLink]="['/signup']" class="trial-button">Signup</button>
+			<button mat-button [routerLink]="['/login']">Login</button>
+		</div>
+	</mat-toolbar-row>
+</mat-toolbar>
+<mat-menu #mnuEntries="matMenu">
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/entry/userentries']">
+		<span> My Duties </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.MANAGER.value)" [routerLink]="['/entry/entries']">
+		<span> Manage Duties </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/entry/usergeneralentries']">
+		<span> My Extra Duties </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.MANAGER.value)" [routerLink]="['/entry/generalentries']">
+		<span> Manage Extra Duties </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/entry/availableentries']">
+		<span> Available Extra Duties </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/entry/userprogresschecklists']">
+		<span> My Progress Checklists </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.MANAGER.value)" [routerLink]="['/entry/progresschecklists']">
+		<span> Manage Progress Checklists </span>
+	</button>
+</mat-menu>
+<mat-menu #mnuAttendance="matMenu">
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/userattendance']">
+		<span> My Attendance </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.MANAGER.value) || hasRole(role.SCHEDULING.value)" [routerLink]="['/attendance']">
+		<span> Manage Attendance </span>
+	</button>
+</mat-menu>
+<mat-menu #mnuSchedule="matMenu">
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.SCHEDULING.value)" [routerLink]="['/scheduling/schedule']">
+		<span> Manage Schedules </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.SCHEDULING.value)" [routerLink]="['/scheduling/scheduletrade']">
+		<span> Approve/Deny Trades </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/scheduling/mytrades']">
+		<span> My Trades </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/scheduling/tradeboard']">
+		<span> Trade Board </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/scheduling/dailyschedule']">
+		<span> Daily Schedules </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/scheduling/myschedule']">
+		<span> My Schedule </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/scheduling/myleaverequests']">
+		<span> My Time Off </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.SCHEDULING.value)" [routerLink]="['/scheduling/leaverequests']">
+		<span> Manage Time Off </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/scheduling/myavailability']">
+		<span> My Availability </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.SCHEDULING.value)" [routerLink]="['/scheduling/useravailability']">
+		<span> Manage Availability </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.SCHEDULING.value)" [routerLink]="['/scheduling/hours']">
+		<span> Manage Employee Hours </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/scheduling/myhours']">
+		<span> My Hours </span>
+	</button>
+</mat-menu>
+<mat-menu #mnuConnect="matMenu">
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/messagelist']">
+		<span> View Messages </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/sendmessage']">
+		<span> Send Message </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item *ngIf="hasRole(role.ADMIN.value)" [routerLink]="['/usernotes']">
+		<span> Employee Notes </span>
+	</button>
+</mat-menu>
+<mat-menu #mnuSetup="matMenu">
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/users']" *ngIf="canSubSetup(role.ADMIN.value)" [queryParams]="{w:true}">
+		<span> Setup Guide </span>
+	</button>
+	<button mat-menu-item [matMenuTriggerFor]="companyEmployee" *ngIf="canSubSetup(role.ADMIN.value)">
+		<span> Employees / Company </span>
+	</button>
+	<button mat-menu-item [matMenuTriggerFor]="dutySetup" *ngIf="canSubSetup(role.ADMIN.value)">
+		<span> Duties </span>
+	</button>
+	<button mat-menu-item [matMenuTriggerFor]="inventorySetup" *ngIf="canSubSetup(role.INVENTORY.value)">
+		<span> Inventory </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/attendancereasons']" *ngIf="canSubSetup(role.ADMIN.value)">
+		<span> Attendance Reasons </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/progresschecklists']" *ngIf="canSubSetup(role.ADMIN.value)">
+		<span> Progress Checklists </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/mysettings']">
+		<span> My Settings </span>
+	</button>
+</mat-menu>
+<mat-menu #companyEmployee="matMenu">
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/users']">
+		<span> Users </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/usernotifications']">
+		<span> User Notifications </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/cellphonecarriers']">
+		<span> Cell Phone Carriers </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/payrates']">
+		<span> Pay Rates </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/positions']">
+		<span> Positions </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/employees']">
+		<span> Employees </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/companysettings']">
+		<span> Company Settings </span>
+	</button>
+</mat-menu>
+
+<mat-menu #dutySetup="matMenu">
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/shifts']">
+		<span> Shifts </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/statuses']">
+		<span> Statuses </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/tasks']">
+		<span> Tasks </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/generaltasks']">
+		<span> Extra Tasks </span>
+	</button>
+</mat-menu>
+
+<mat-menu #inventorySetup="matMenu">
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/inventorycategories']">
+		<span> Inventory Categories </span>
+	</button>
+	<button (click)="sidenav.close()" mat-menu-item [routerLink]="['/setup/vendors']">
+		<span> Vendors </span>
+	</button>
+</mat-menu>
+<mat-sidenav-container class="side-menu" (backdropClick)="sidenav.close()">
+	<mat-sidenav #sidenav (keydown.escape)="sidenav.close()" disableClose>
+		<div *ngIf="loggedInUser && !hasExpired" fxLayout="column">
+			<button mat-button [matMenuTriggerFor]="mnuEntries" *ngIf="hasModule(module.DUTIES.value)">Duties</button>
+			<button mat-button [matMenuTriggerFor]="mnuAttendance" *ngIf="hasModule(module.DUTIES.value) || hasModule(module.SCHEDULING.value)">Attendance</button>
+			<button mat-button [matMenuTriggerFor]="mnuSchedule" *ngIf="hasModule(module.SCHEDULING.value)">Scheduling</button>
+			<button mat-button (click)="sidenav.close()" *ngIf="hasModule(module.INVENTORY.value) && hasRole(role.INVENTORY.value)" [routerLink]="['/inventoryitems']">Inventory</button>
+			<button mat-button (click)="sidenav.close()" [routerLink]="['/maintenancerequests']" *ngIf="hasModule(module.MAINTENANCE_REQUESTS.value) && (hasRole(role.MANAGER.value) || hasRole(role.MAINTENANCE_REQUESTS.value))">Maintenance</button>
+			<button mat-button (click)="sidenav.close()" [routerLink]="['/documents']">Documents</button>
+			<button mat-button [matMenuTriggerFor]="mnuConnect">Connect</button>
+			<button mat-button [matMenuTriggerFor]="mnuSetup">Setup</button>
+			<button mat-button (click)="sidenav.close()" [routerLink]="['/contactus']">Contact Us</button>
+			<button mat-button (click)="sidenav.close();clockInOut()" *ngIf="!loggedInUser.user.clockedIn">Clock In</button>
+			<button mat-button (click)="sidenav.close();clockInOut()" *ngIf="loggedInUser.user.clockedIn">Clock Out</button>
+			<button mat-button (click)="sidenav.close();logout()">Logout</button>
+		</div>
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<div class="content">
+			<div *ngIf="expirationDateFormatted && !hasExpired && showSubscriptionErrors" class="error-label">
+				<strong>Your subscription will expire on {{expirationDateFormatted}}.
+					<span *ngIf="isAdmin">Please click
+						<a [routerLink]="['/subscribe']" style="color:blue">here</a> to subscribe!</span>
+					<span *ngIf="!isAdmin">Please contact your administrator!</span>
+				</strong>
+				<br />
+				<br />
+			</div>
+			<div *ngIf="hasExpired && showSubscriptionErrors" class="error-label">
+				<strong>Your subscription has expired!
+					<span *ngIf="isAdmin">Please click
+						<a [routerLink]="['/subscribe']" style="color:blue">here</a> to subscribe!</span>
+					<span *ngIf="!isAdmin">Please contact your administrator!</span>
+				</strong>
+				<br />
+				<br />
+			</div>
+			<div *ngIf="!hasExpired || !showSubscriptionErrors">
+				<router-outlet #outlet></router-outlet>
+			</div>
+		</div>
+	</mat-sidenav-content>
+</mat-sidenav-container>
+<modal-dialog #timeoutDialog [showBackdrop]='true' headerText="Session Timeout" bodyContent="Are you still there? Your session is about to expire!">
+</modal-dialog>
+<overlay [loading]="loading"></overlay>
+<modal-dialog #confirmDialog [showBackdrop]='true'>
+</modal-dialog>

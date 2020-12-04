@@ -1,0 +1,65 @@
+<form #form="ngForm">
+	<div *ngIf="forgotPassword == 0">
+		<h2>Login</h2>
+		<mat-form-field class="full-width">
+			<input type="email" name="email" matInput [(ngModel)]="email" placeholder="Email" (keydown.enter)="enter($event)" required />
+		</mat-form-field>
+		<mat-form-field class="full-width" *ngIf="forgotPassword == 0">
+			<input name="password" matInput [(ngModel)]="password" placeholder="Password" (keydown.enter)="enter($event)" type="password"
+			 required />
+		</mat-form-field>
+		<label class="checkbox-label">
+			<input type="checkbox" name="rememberMe" [(ngModel)]="rememberMe" /> Remember Me
+		</label>
+		<br />
+	</div>
+	<div *ngIf="forgotPassword == 1">
+		<h2>Forgot Password</h2>
+		<mat-form-field class="full-width">
+			<input name="forgotEmail" matInput [(ngModel)]="email" placeholder="Email" required />
+		</mat-form-field>
+	</div>
+	<div *ngIf="forgotPassword == 3">
+		<h2>Reset Password</h2>
+		<mat-form-field class="full-width">
+			<input name="passwordReset" matInput [(ngModel)]="password" placeholder="Password" type="password" required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input name="passwordConfirm" matInput [(ngModel)]="passwordConfirm" placeholder="Confirm Password" type="password" required
+			/>
+		</mat-form-field>
+	</div>
+	<div *ngIf="forgotPassword == 0">
+		<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px">
+			<button mat-raised-button color="warn" (click)="clockOut()">
+				Clock Out
+			</button>
+			<button mat-raised-button color="accent" (click)="clockIn()">
+				Clock In
+			</button>
+			<button mat-raised-button color="primary" (click)="login()">
+				Login
+			</button>
+		</div>
+		<br />
+		<button mat-button color="primary" (click)="forgotPassword = 1" style="text-align: left">Forgot password?</button>
+		<br />
+		<!-- <button mat-button color="primary" [routerLink]="['/signup']" style="text-align: left">Free Trial</button> -->
+	</div>
+	<div *ngIf="forgotPassword == 1">
+		<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px">
+			<button mat-raised-button color="warn" (click)="back()">Back</button>
+			<button mat-raised-button color="primary" (click)="next()">Next</button>
+		</div>
+	</div>
+	<div *ngIf="forgotPassword == 3">
+		<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px">
+			<button mat-raised-button color="warn" (click)="back(true)">Back</button>
+			<button mat-raised-button color="primary" (click)="resetPassword()">Reset</button>
+		</div>
+	</div>
+	<div *ngIf="forgotPassword == 2">
+		An email has been sent with instructions on how to reset your password.
+	</div>
+</form>
+<overlay [loading]="loading"></overlay>

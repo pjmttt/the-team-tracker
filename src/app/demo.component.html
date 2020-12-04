@@ -1,0 +1,26 @@
+<form #form="ngForm">
+	<h2>Free Demo</h2>
+	<div *ngIf="!requested">
+		<mat-form-field class="full-width">
+			<input id="firstName" name="firstName" matInput [(ngModel)]="firstName" placeholder="First Name" required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="lastName" name="lastName" matInput [(ngModel)]="lastName" placeholder="Last Name" required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="company" name="companyName" matInput [(ngModel)]="companyName" placeholder="Company Name"
+				required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="phoneNumber" name="phoneNumber" matInput [(ngModel)]="phoneNumber" placeholder="Phone Number" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="email" name="email" matInput [(ngModel)]="email" placeholder="Email" required />
+		</mat-form-field>
+		<button mat-raised-button color="primary" (click)="request()">GO</button>
+	</div>
+	<div *ngIf="requested">
+		Your request has been sent! Sit tight, we will contact you shortly!
+	</div>
+</form>
+<overlay [loading]="loading"></overlay>

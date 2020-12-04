@@ -1,0 +1,116 @@
+<div *ngIf="scheduleDateItem" style="min-height:50px">
+	<div *ngIf="!unscheduled">
+		<mat-icon class="mat-icon-small" color="primary" aria-label="Add" matTooltip="Add" (click)="addSchedule.emit()">add_circle_outline</mat-icon>
+
+		<mat-icon class="mat-icon-small" [mdePopoverTriggerFor]="popAvailability" matTooltip="Availability" (onPopoverOpen)="availabilityOpen()"
+		 (onPopoverClose)="availabilityClose()" mdePopoverTriggerOn="click" color="primary" aria-label="Availability Info" *ngIf="scheduleDateItem.availabilities.length > 0">info_outline</mat-icon>
+
+		<mat-icon class="mat-icon-small" color="success" aria-label="Pending Info" matTooltip="Pending Time Off/Availability" *ngIf="scheduleDateItem.pendingLeaveRequests.length > 0 || scheduleDateItem.pendingAvailabilities.length > 0"
+		 [mdePopoverTriggerFor]="popPending" (onPopoverOpen)="pendingOpen()" (onPopoverClose)="pendingClose()" mdePopoverTriggerOn="click">help_outline</mat-icon>
+
+		<mat-icon class="mat-icon-small" color="warn" aria-label="No Availability" matTooltip="No Availability" [mdePopoverTriggerFor]="popNoAvailability" mdePopoverTriggerOn="click"
+		 *ngIf="scheduleDateItem.availabilities.length <= 0">error_outline</mat-icon>
+
+		<mat-icon class="mat-icon-small" color="warn" aria-label="Out Of Office" matTooltip="Requested Time Off" *ngIf="scheduleDateItem.leaveRequests.length > 0"
+		 [mdePopoverTriggerFor]="popLeaveRequest" (onPopoverOpen)="leaveRequestOpen()" (onPopoverClose)="leaveRequestClose()" mdePopoverTriggerOn="click">not_interested</mat-icon>
+
+		<mat-icon class="mat-icon-small" style="color:teal" [matMenuTriggerFor]="mnuEmailEmployeeDay" matTooltip="Send Schedule" *ngIf="scheduleDateItem.scheduleItems.length > 0"
+		 aria-label="Email Schedule">mail_outline</mat-icon>
+		<mat-menu #mnuEmailEmployeeDay="matMenu">
+			<button mat-menu-item (click)="sendSchedulesForDay()">Email</button>
+			<button mat-menu-item (click)="sendSchedulesForDay(true)">Text Message</button>
+		</mat-menu>
+
+		<br />
+	</div>
+	<div *ngIf="unscheduled" fxLayoutAlign="start" style="margin-top:-2px;margin-bottom:2px">
+		<div *ngIf="!scheduleDateItem.tradePending">
+			<button class="mat-xx-small-button" matTooltip="Trade Schedule" mat-icon-button (click)="tradeSchedule.emit(scheduleDateItem.scheduleItems[0].schedule)">
+				<mat-icon class="mat-xx-small-button" color="primary" aria-label="Swap">swap_horiz</mat-icon>
+			</button>
+		</div>
+		<div *ngIf="scheduleDateItem.tradePending">
+			<button class="mat-xx-small-button" mat-icon-button  matTooltip="Trade Pending">
+				<mat-icon class="mat-xx-small-button" color="primary" aria-label="Pending">hourglass_empty</mat-icon>
+			</button>
+		</div>
+	</div>
+	<div>
+		<div *ngFor="let sched of scheduleDateItem.scheduleItems" class="schedule-container">
+			<div *ngIf="!sched.schedule['isEditing']" class="schedule-item schedule-label" [style.color]="sched.schedule.task.textColor"
+			 [style.border]="sched.isConflict ? 'red solid 2px' : null" dnd-draggable [dragEnabled]="true" [dragData]="sched.schedule">
+				<div class="float-right" style="margin-right:3px;margin-top:3px">
+					<button class="icon-pencil-black icon-x-small icon-button" *ngIf="unscheduled" (click)="editSchedule.emit(sched.schedule)"></button>
+					&nbsp;
+					<button class="icon-remove-black icon-x-small icon-button" (click)="removeSchedule.emit(sched.schedule)"></button>
+				</div>
+				<div *ngIf="sched.schedule.notes">{{sched.schedule.notes}}</div>
+				{{sched.startEnd}}
+				<br /> {{sched.schedule.shift.shiftName}} - {{sched.schedule.task.taskName}}
+			</div>
+			<div *ngIf="sched.schedule['isEditing']" class="schedule-item">
+				<input type="text" placeholder="Shift" typeahead [dataSource]="lookups.shifts" [(ngModel)]="sched.schedule.shiftId" displayMember="shiftName"
+				 valueMember="shiftId" (ngModelChange)="shiftChanged(sched.schedule)" />
+				<input type="text" placeholder="Task" typeahead [dataSource]="lookups.tasks" [(ngModel)]="sched.schedule.taskId" displayMember="taskName"
+				 valueMember="taskId" (ngModelChange)="taskChanged(sched.schedule)" />
+				<input dateTimePicker placeholder="Start" [(ngModel)]="sched.schedule.startTime" [hideDate]="true" />
+				<input dateTimePicker placeholder="End" [(ngModel)]="sched.schedule.endTime" [hideDate]="true" />
+				<div class="float-right">
+					<button class="icon-check-black icon-x-small icon-button" (click)="saveSchedule.emit(sched.schedule)"></button>
+					&nbsp;
+					<button class="icon-cancel-black icon-x-small icon-button" (click)="cancelSchedule.emit(sched.schedule)"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<mde-popover #popAvailability="mdePopover" [mdePopoverOverlapTrigger]="false">
+	<mat-card style="max-width: 300px">
+		<mat-card-content>
+			<strong>Availability:</strong>
+			<div *ngFor="let av of availabilities">
+				<span *ngIf="av.allDay">All Day</span>
+				<span *ngIf="!av.allDay">{{formatTime(av.startTime)}} - {{formatTime(av.endTime)}}</span>
+			</div>
+		</mat-card-content>
+	</mat-card>
+</mde-popover>
+<mde-popover #popPending="mdePopover" [mdePopoverOverlapTrigger]="false">
+	<mat-card style="max-width: 300px">
+		<mat-card-content>
+			<div *ngIf="pendingLeaveRequests.length > 0">
+				<strong>Pending Time Off:</strong>
+				<div *ngFor="let pl of pendingLeaveRequests">
+					<span>{{getLRDateRange(pl)}}</span>
+				</div>
+				<br />
+			</div>
+			<div *ngIf="pendingAvailabilities.length > 0">
+				<strong>Pending Availability:</strong>
+				<div *ngFor="let av of pendingAvailabilities">
+					<span *ngIf="av.allDay">All Day</span>
+					<span *ngIf="!av.allDay">{{formatTime(av.startTime)}} - {{formatTime(av.endTime)}}</span>
+				</div>
+			</div>
+		</mat-card-content>
+	</mat-card>
+</mde-popover>
+<mde-popover #popLeaveRequest="mdePopover" [mdePopoverOverlapTrigger]="false">
+	<mat-card style="max-width: 300px">
+		<mat-card-content>
+			<div *ngIf="leaveRequests.length > 0">
+				<strong>Time Off:</strong>
+				<div *ngFor="let l of leaveRequests">
+					<span>{{getLRDateRange(l)}}</span>
+				</div>
+			</div>
+		</mat-card-content>
+	</mat-card>
+</mde-popover>
+<mde-popover #popNoAvailability="mdePopover" [mdePopoverOverlapTrigger]="false">
+	<mat-card style="max-width: 300px">
+		<mat-card-content>
+			No availability
+		</mat-card-content>
+	</mat-card>
+</mde-popover>

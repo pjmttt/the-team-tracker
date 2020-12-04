@@ -1,0 +1,38 @@
+<div *ngIf="user" class="small-container">
+	<div class="header">
+		Hours
+		<!-- <span *ngIf="forUser">
+			<strong>({{totalHours}} total)</strong>
+		</span> -->
+	</div>
+	<div fxLayout="row" fxLayoutGap="15px">
+		<div fxFlex="20%">
+			Start:
+			<input dateTimePicker [(ngModel)]="startDate" [hideTime]="true" (ngModelChange)="startEndChanged()" />
+		</div>
+		<div fxFlex="20%">
+			End:
+			<input dateTimePicker [(ngModel)]="endDate" [hideTime]="true" (ngModelChange)="startEndChanged()" />
+		</div>
+		<div fxFlex="20%" *ngIf="lookups">
+			Employee(s):
+			<checklist [dataSource]="lookups.users" [selectedItems]="selectedUsers" displayMember="displayName" (selectionChanged)="filterChanged()"></checklist>
+		</div>
+		<div fxFlex="40%" *ngIf="lookups">
+			<label>
+				<input type="radio" [(ngModel)]="groupedBy" [value]="0" (ngModelChange)="refreshGrid(false)" />&nbsp;&nbsp;Ungrouped</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>
+				<input type="radio" [(ngModel)]="groupedBy" [value]="1" (ngModelChange)="refreshGrid(true)" />&nbsp;&nbsp;By Employee</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<label>
+				<input type="radio" [(ngModel)]="groupedBy" [value]="2" (ngModelChange)="refreshGrid(true)" />&nbsp;&nbsp;By Employee & Day</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
+	</div>
+	<br />
+	<div [style.minWidth]="forUser ? '450px' : '570px'">
+		<gridview-container [grid]="gridHours" (refreshGrid)="refreshGrid(false)" [loading]="loading" [hideButtons]="grouped" (printing)="printing()"
+		 (printed)="printed()" [printHeader]="printHeader"></gridview-container>
+	</div>
+</div>

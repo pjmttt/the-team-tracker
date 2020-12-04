@@ -1,0 +1,39 @@
+<div class="small-container">
+	<div class="header">{{forUser ? 'My ' : ''}}Time Off</div>
+	<div fxLayout="row" fxLayoutGap="15px">
+		<div fxFlex="200px" *ngIf="!forUser">
+			Employee:
+			<br />
+			<checklist [dataSource]="lookups.users" [selectedItems]="selectedUsers" (selectionChanged)="filterChanged()" displayMember="displayName"></checklist>
+		</div>
+		<div fxFlex="200px" *ngIf="!forUser">
+			From:
+			<br />
+			<input dateTimePicker [(ngModel)]="startDate" [hideTime]="true" (ngModelChange)="filterChanged()" />
+		</div>
+		<div fxFlex="200px" *ngIf="!forUser">
+			To:
+			<br />
+			<input dateTimePicker [(ngModel)]="endDate" [hideTime]="true" (ngModelChange)="filterChanged()" />
+		</div>
+		<!-- <div fxFlex="50px" *ngIf="!forUser">
+			<br />
+			<button class="mat-small-button" mat-icon-button (click)='refreshGrid()'>
+				<mat-icon color="primary" aria-label="Search">search</mat-icon>
+			</button>
+		</div> -->
+		<div fxFlex="50px" *ngIf="!forUser">
+			<br />
+			<button class="mat-small-button" mat-icon-button (click)='clearSearch()'>
+				<mat-icon color="primary" aria-label="Search">clear</mat-icon>
+			</button>
+		</div>
+	</div>
+	<div style="min-width:780px">
+		<gridview-container [addRow]="addRequest" [grid]="gridMain" (refreshGrid)="refreshGrid(false)" [loading]="loading"></gridview-container>
+	</div>
+</div>
+<modal-dialog #leaveRequestModal [showBackdrop]='true' headerText='Submit Time Off' [showFooter]="false" [hideCloseButton]="true">
+	<leave-request [forUser]="forUser" [lookups]="lookups" [leaveRequestModal]="leaveRequestModal">
+	</leave-request>
+</modal-dialog>

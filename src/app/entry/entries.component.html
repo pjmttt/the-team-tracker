@@ -1,0 +1,88 @@
+<div class="entries">
+	<div *ngIf="!forUser">
+		<div class="header">{{entryType == 0 ? 'Duties' : 'Extra Duties'}}</div>
+		<div fxLayout="row" fxLayoutGap="15px">
+			<div fxFlex="200px">
+				<label>
+					<input type="radio" [(ngModel)]="viewType" [value]="0" (ngModelChange)="viewTypeChanged()" />&nbsp;&nbsp;Today</label>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<label>
+					<input type="radio" [(ngModel)]="viewType" [value]="1" (ngModelChange)="viewTypeChanged()" />&nbsp;&nbsp;Filtered By</label>
+			</div>
+			<div fxFlex="200px" *ngIf="viewType == 0">
+				<div fxLayout="row">
+					<button class="mat-small-button" mat-icon-button (click)='previousDay()'>
+						<mat-icon color="primary" aria-label="Previous">navigate_before</mat-icon>
+					</button>
+					<div style="padding-top: 3px;">
+						<input dateTimePicker [(ngModel)]="selectedDate" [hideTime]="true" (ngModelChange)="refreshGrid()" />
+					</div>
+					<button class="mat-small-button" mat-icon-button (click)='nextDay()'>
+						<mat-icon color="primary" aria-label="Next">navigate_next</mat-icon>
+					</button>
+				</div>
+			</div>
+			<div fxFlex="200px" *ngIf="viewType == 1">
+				<input dateTimePicker [(ngModel)]="startDate" [hideTime]="true" />
+			</div>
+			<span *ngIf="viewType == 1">to</span>
+			<div fxFlex="200px" *ngIf="viewType == 1">
+				<input dateTimePicker [(ngModel)]="endDate" [hideTime]="true" />
+			</div>
+			<div fxFlex="200px" *ngIf="viewType == 1">
+				<button class="mat-small-button" mat-icon-button (click)='refreshGrid(false, true)'>
+					<mat-icon color="primary" aria-label="Search">search</mat-icon>
+				</button>
+			</div>
+			<div fxFlex="200px">
+				<button mat-button *ngIf="gridEntries && gridEntries.data" (click)="emailEntries(gridEntries.data)">
+					<mat-icon color="primary" aria-label="Send Reports">mail_outline</mat-icon>
+					<span>Send Reports</span>
+				</button>
+			</div>
+		</div>
+		<br />
+		<div fxLayout="row" fxLayoutGap="15px" *ngIf="lookups && viewType == 1">
+			<div fxFlex="300px">
+				Employee:
+				<br />
+				<checklist [dataSource]="lookups.users" [selectedItems]="selectedUsers" displayMember="displayName"></checklist>
+			</div>
+			<div fxFlex="300px">
+				Task:
+				<br />
+				<checklist [dataSource]="lookups.tasks" [selectedItems]="selectedTasks" displayMember="taskName"></checklist>
+			</div>
+			<!-- <div fxFlex="300px" *ngIf="entryType == 0">
+				Shift:
+				<br />
+				<checklist [dataSource]="lookups.shifts" [selectedItems]="selectedShifts" displayMember="shiftName"></checklist>
+			</div> -->
+			<!-- <div fxFlex="25" *ngIf="entryType == 0">
+				Status:
+				<br />
+				<checklist [dataSource]="lookups.statuses" [selectedItems]="selectedStatuses" displayMember="statusName"></checklist>
+			</div> -->
+			<div fxFlex="100px">
+				With Notes:
+				<br />
+				<input type="checkbox" name="notesOnly" [(ngModel)]="notesOnly" />
+			</div>
+		</div>
+	</div>
+	<div *ngIf="forUser">
+		<div class="header">{{entryType == 0 ? 'My Duties' : 'My Extra Duties'}}</div>
+	</div>
+	<div style="min-width: 1000px">
+		<gridview-container #gridEntriesContainer [grid]="gridEntries" (refreshGrid)="refreshGrid(false, $event)" [loading]="loading" [hideButtons]="forUser"></gridview-container>
+	</div>
+	<br />
+	<div fxLayoutAlign="end" *ngIf="entryType == 0 && !forUser">
+		<button mat-raised-button color="primary" (click)="populateFromSchedule()">Populate From Schedule</button>
+	</div>
+	<br />
+</div>
+<modal-dialog #notifyStatusChangedModal [showBackdrop]='true' headerText='Notify Change Status' [showFooter]="false" [hideCloseButton]="true">
+	<notify-status-changed [entry]="entry" [apiUrl]="apiUrl" [parentDialog]="notifyStatusChangedModal">
+	</notify-status-changed>
+</modal-dialog>

@@ -1,0 +1,18 @@
+<div class="small-container">
+	<div class='header'>User Notes</div>
+	<div style="min-width:500px">
+		<gridview-container [grid]="gridNotes" (refreshGrid)="refreshGrid()" [loading]="loading"></gridview-container>
+	</div>
+	<br />
+</div>
+<modal-dialog #noteModal [showBackdrop]='true' headerText='Add Note'>
+	<div *ngIf="userNote" class="modal-dialog-body">
+		<div fxLayout="row">
+			<div fxFlex="100%">
+				Note:
+				<ckeditor [(ngModel)]="userNote.note" *ngIf="!configService.isMobile"></ckeditor>
+				<textarea [(ngModel)]="userNote.note" *ngIf="configService.isMobile" rows="6" style="width: 100%"></textarea>
+			</div>
+		</div>
+	</div>
+</modal-dialog>

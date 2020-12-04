@@ -1,0 +1,28 @@
+<div>
+	<div class='header'>Inventory</div>
+	<div fxLayout="row" fxLayoutGap="15px">
+		<div fxFlex="300px">
+			Vendor(s):
+			<checklist [dataSource]="vendors" [selectedItems]="selectedVendors" (selectionChanged)="filterChanged()" displayMember="vendorName"></checklist>
+		</div>
+		<div fxFlex="300px">
+			Category(ies):
+			<checklist [dataSource]="categories" [selectedItems]="selectedCategories" (selectionChanged)="filterChanged()" displayMember="categoryName"></checklist>
+		</div>
+		<div fxFlex>
+			Needed Only:<br />
+			<input type="checkbox" name="neededOnly" [(ngModel)]="neededOnly" (ngModelChange)="filterChanged()" />
+		</div>
+	</div>
+	<br />
+	<div style="min-width:1000px">
+		<gridview-container #gridViewContainer [multiAdd]="true" [grid]="gridInventory" (refreshGrid)="refreshGrid(false)" [loading]="loading"></gridview-container>
+	</div>
+	<br />
+</div>
+<modal-dialog #inventoryTransactionModal [showBackdrop]='true' headerText="{{incoming ? 'Add ' : 'Remove '}}{{inventoryItem?.inventoryItemName}}"
+ [showFooter]="false" [hideCloseButton]="true">
+	<inventory-transaction-edit *ngIf="inventoryTransaction" [inventoryTransaction]="inventoryTransaction" [incoming]="incoming"
+	 [inventoryItem]="inventoryItem" [inventoryTransactionModal]="inventoryTransactionModal" [vendors]="vendors" [apiUrl]="apiUrl">
+	</inventory-transaction-edit>
+</modal-dialog>

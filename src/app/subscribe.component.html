@@ -1,0 +1,40 @@
+<div class="small-container">
+	<div *ngIf="!transactionNumber">
+		<h3>Subscribe</h3>
+		<div fxLayout="row">
+			<mat-checkbox name="all" [(ngModel)]="modules.all" (change)="modules.duties=false;modules.scheduling=false;modules.inventory=false;modules.maintenance=false">
+				All Modules $25/mo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</mat-checkbox>
+			<mat-checkbox name="duties" [(ngModel)]="modules.duties" (change)="modules.all=false"> Duties $9/mo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</mat-checkbox>
+			<mat-checkbox name="scheduling" [(ngModel)]="modules.scheduling" (change)="modules.all=false"> Scheduling $9/mo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</mat-checkbox>
+			<mat-checkbox name="inventory" [(ngModel)]="modules.inventory" (change)="modules.all=false"> Inventory $4.50/mo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</mat-checkbox>
+			<mat-checkbox name="maintenance" [(ngModel)]="modules.maintenance" (change)="modules.all=false"> Maintenance $4.50/mo</mat-checkbox>
+		</div>
+		<br />
+		<br />
+		<div fxLayout="row">
+			<form #frmPaypal id="frmPaypal" action="{{paypalUrl}}" method="post" target="_top">
+				<input type="hidden" name="cmd" value="_s-xclick">
+				<input type="hidden" name="hosted_button_id" value={{paypalKey}}>
+				<input type="hidden" name="first_name" value="{{user.firstName}}">
+				<input type="hidden" name="last_name" value="{{user.lastName}}">
+				<input type="hidden" name="address1" value="{{user.company.streetAddress1}}">
+				<input type="hidden" name="address2" value="{{user.company.streetAddress2}}">
+				<input type="hidden" name="city" value="{{user.company.city}}">
+				<input type="hidden" name="state" value="{{user.company.stateProvince}}">
+				<input type="hidden" name="zip" value="{{user.company.postalCode}}">
+				<input type="hidden" name="email" value="{{user.email}}">
+				<input type="hidden" name="night_phone_a" value="{{nightPhoneA}}">
+				<input type="hidden" name="night_phone_b" value="{{nightPhoneB}}">
+				<input type="hidden" name="night_phone_c" value="{{nightPhoneC}}">
+				<input type="hidden" name="return" value="{{location}}">
+				<input type="hidden" name="custom" value="{{requestNumber}}">
+				<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif" border="0" style="height:50px"
+				 name="submit" (click)="requestSubscription()" alt="PayPal - The safer, easier way to pay online!">
+				<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+			</form>
+		</div>
+	</div>
+	<div *ngIf="transactionNumber">
+		Thank you for subscribing to The Team Tracker. Your transaction number is {{transactionNumber}}
+	</div>
+	<overlay [loading]="loading"></overlay>

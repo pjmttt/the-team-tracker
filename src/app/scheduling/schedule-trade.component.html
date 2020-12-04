@@ -1,0 +1,16 @@
+<div class="small-container">
+	<div class="header">Schedule Trades</div>
+	<div style="min-width:800px">
+		<gridview-container [grid]="gridMain" (refreshGrid)="refreshGrid()" [loading]="loading" [hideButtons]="true"></gridview-container>
+	</div>
+</div>
+<modal-dialog #tradeApproveDenyModal [showBackdrop]='true'>
+	<div class="modal-dialog-body">
+		<div fxLayout="row">
+			<div fxFlex="100%">
+				Comments:
+				<ckeditor [(ngModel)]="comments"></ckeditor>
+			</div>
+		</div>
+	</div>
+</modal-dialog>

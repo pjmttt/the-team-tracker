@@ -1,0 +1,55 @@
+/* .statuses {
+	display: inline-block;
+}
+
+.status {
+	padding: 4px;
+	width: 100%;
+	text-align: center;
+	height: 25px;
+}
+
+.status-container {
+	width: 100px;
+}
+
+.status-button {
+	display: inline-block;
+	vertical-align: top;
+	height: 20px;
+	cursor: pointer;
+}
+
+.status-button span {
+	width: 19px;
+	height: 19px;
+}
+
+.status-abbreviation {
+	text-align: center;
+	float: left;
+	padding: 4px;
+	height: 24px;
+	vertical-align: middle;
+}
+
+.entry-status {
+	height: 24px;
+	vertical-align: middle;
+} */
+
+.status-button {
+	height: 20px;
+	cursor: pointer;
+}
+
+.status {
+	text-align: center;
+	height: 100%;
+}
+
+.status-item {
+	padding: 4px;
+	height: 14px;
+	vertical-align: middle;
+}

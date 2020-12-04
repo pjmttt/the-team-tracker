@@ -1,0 +1,19 @@
+<div fxLayout="row" *ngIf="row.task && row.userId" class="entry-status">
+	<div fxFlex="110px">
+		<div *ngIf="distinctStatuses.length < 1" class="status">
+			<div class="status-item">None</div>
+		</div>
+		<div fxFlex="row" *ngFor="let d of distinctStatuses" class="status">
+			<div [style.backgroundColor]="d.backgroundColor" class="status-item" [style.color]="d.textColor" *ngIf="d.abbreviation">
+				{{d.abbreviation}}
+			</div>
+			<div class="status-item" *ngIf="!d.abbreviation">
+				&Oslash;
+			</div>
+		</div>
+	</div>
+	<div class="status-button" fxFlex="10px" (click)='expandCollapseEntry()'>
+		<mat-icon color="primary" style="height:20px" aria-label="Expand" *ngIf="!expanded">expand_more</mat-icon>
+		<mat-icon color="primary" style="height:20px" aria-label="Collapse" *ngIf="expanded">expand_less</mat-icon>
+	</div>
+</div>

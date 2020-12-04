@@ -1,0 +1,114 @@
+<!-- <div *ngIf="loggedInUser">
+	<div fxLayout="row" fxLayoutGap="15px">
+		<div fxFlex="35%">
+			<mat-form-field class="full-width">
+				<input id="companyName" name="companyName" matInput placeholder="Company" [(ngModel)]="loggedInUser.user.company.companyName"
+				 required />
+			</mat-form-field>
+		</div>
+		<div fxFlex="25%">
+
+		</div>
+		<div fxFlex="25%">
+			<mat-form-field class="full-width">
+				<input id="ipAddress" name="ipAddress" matInput placeholder="IP Address" [(ngModel)]="loggedInUser.user.company.ipAddress"
+				/>
+			</mat-form-field>
+		</div>
+		<div fxFlex="15%">
+			<button mat-raised-button color="primary" (click)="getIP()">Auto</button>
+		</div>
+	</div>
+</div>
+<br /> -->
+<div *ngIf="emailTemplates">
+	<mat-tab-group [(selectedIndex)]="selectedTabIndex">
+		<mat-tab label="Company Settings">
+		</mat-tab>
+		<div *ngFor="let tk of templateKeys">
+			<mat-tab label="{{emailTemplateType[tk].label}}">
+			</mat-tab>
+		</div>
+	</mat-tab-group>
+	<br />
+	<div *ngIf="selectedTabIndex == 0 && loggedInUser" style="margin-left:auto;margin-right:auto;max-width:500px">
+		<br />
+		<br />
+		<mat-form-field class="full-width">
+			<input id="company" name="companyName" matInput [(ngModel)]="loggedInUser.user.company.companyName" placeholder="Company Name"
+			 required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="street1" name="streetAddress1" matInput [(ngModel)]="loggedInUser.user.company.streetAddress1" placeholder="Street 1"
+			/>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="street2" name="streetAddress2" matInput [(ngModel)]="loggedInUser.user.company.streetAddress2" placeholder="Street 2"
+			/>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="city" name="city" matInput [(ngModel)]="loggedInUser.user.company.city" placeholder="City" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="stateProvince" name="stateProvince" matInput [(ngModel)]="loggedInUser.user.company.stateProvince" placeholder="State / Province"
+			/>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="postalCode" name="postalCode" matInput [(ngModel)]="loggedInUser.user.company.postalCode" placeholder="Zip / Postal Code"
+			/>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="timezone" name="timezone" typeahead [dataSource]="timezones" matInput placeholder="Time Zone"
+			[(ngModel)]="loggedInUser.user.company.timezone" required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="country" name="country" matInput [(ngModel)]="loggedInUser.user.company.country" placeholder="Country" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="weekStart" name="weekStart" typeahead [dataSource]="days" displayMember="name" valueMember="value" matInput placeholder="Week Start"
+			 [(ngModel)]="loggedInUser.user.company.weekStart" required />
+		</mat-form-field>
+		<div fxLayout="row">
+			<div fxFlex="85%">
+				<mat-form-field class="full-width">
+					<input id="ipAddress" name="ipAddress" matInput placeholder="IP Address" [(ngModel)]="loggedInUser.user.company.ipAddress"
+					/>
+				</mat-form-field>
+			</div>
+			<div fxFlex="15%">
+				<button mat-raised-button color="accent" (click)="getIP()">Auto</button>
+			</div>
+		</div>
+		<mat-form-field class="full-width">
+			<input id="minClockDistance" name="minClockDistance" type="number" matInput placeholder="Minimum Clock In/Out Distance"
+			 [(ngModel)]="loggedInUser.user.company.minClockDistance" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="minutesBeforeLate" name="minutesBeforeLate" type="number" matInput placeholder="Minutes Before Late"
+			 [(ngModel)]="loggedInUser.user.company.minutesBeforeLate" />
+		</mat-form-field>
+		<div fxLayout="row">
+			Your subscription will expire on {{expirationDateFormatted}}&nbsp;&nbsp;<strong><a [routerLink]="['/subscribe']" style="color:blue">Renew Now!</a></strong>
+		</div>
+	</div>
+	<div *ngIf="selectedTabIndex > 0">
+		<mat-form-field class="full-width">
+			<input type="text" name="selectedEmailTemplateBody" placeholder="Subject" matInput [(ngModel)]="selectedEmailTemplate.subject"
+			/>
+		</mat-form-field>
+		Email Template:
+		<ckeditor [(ngModel)]="selectedEmailTemplate.body"></ckeditor>
+		<br />
+		<br />
+		<mat-form-field class="full-width">
+			<textarea matInput placeholder="Text Message Template" rows="10" name="textMessage" [(ngModel)]="selectedEmailTemplate.bodyText"></textarea>
+		</mat-form-field>
+	</div>
+</div>
+<br />
+<div fxLayoutAlign="end">
+	<button mat-raised-button color="primary" (click)="save()">Save</button>
+</div>
+<br />
+<br />
+<overlay [loading]="loading"></overlay>

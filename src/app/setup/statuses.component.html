@@ -1,0 +1,21 @@
+<div class="small-container">
+	<div class="header">{{pluralTitle}}</div>
+	<div *ngIf="wizard">{{wizardText}}</div>
+	<div style="min-width:640px">
+		<gridview-container [grid]="gridMain" (refreshGrid)="refreshGrid(false)" [loading]="loading" [hidePrintButton]="true"></gridview-container>
+	</div>
+	<div *ngIf="wizard" fxLayout="row">
+		<div fxFlex="50%" style="margin-top:10px">
+			<button mat-raised-button color="primary" (click)="back()">Back</button>
+		</div>
+		<div fxFlex="50%" fxLayoutAlign="end" style="margin-top:10px">
+			<button mat-raised-button color="primary" (click)="next()">Next</button>
+		</div>
+	</div>
+</div>
+<overlay [loading]="loading"></overlay>
+<modal-dialog #emailTemplateModal [showBackdrop]='true' headerText='{{status?.statusName}} Email Template' [showFooter]="false"
+ [hideCloseButton]="true">
+	<status-email-template *ngIf="status" [status]="status" [emailTemplateModal]="emailTemplateModal">
+	</status-email-template>
+</modal-dialog>

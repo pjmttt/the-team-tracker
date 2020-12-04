@@ -1,0 +1,250 @@
+<div class="printarea">
+	<div *ngIf="showPrintArea">
+		<table class="print-table schedule-print">
+			<thead>
+				<tr>
+					<th style="width: 12.5%">Employee</th>
+					<th *ngFor="let dt of dates" style="width: 12.5%">{{dt.dayName}}
+						<br />{{dt.dateFormatted}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let u of scheduleUsers">
+					<td style="width: 12.5%">
+						{{u.displayName}}
+					</td>
+					<td *ngFor="let dt of dates" style="width: 12.5%; vertical-align: top">
+						<div *ngFor="let sched of usersSchedules[u.userId].dates[dt.dateFormatted].scheduleItems">
+							<div class="schedule-item schedule-label" [style.color]="sched.schedule.task.textColor">
+								<div *ngIf="sched.schedule.notes">{{sched.schedule.notes}}</div>
+								{{sched.startEnd}}
+								<br /> {{sched.schedule.shift.shiftName}} - {{sched.schedule.task.taskName}}
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div fxLayout="row">
+	<div fxLayout="row" fxFlex="300px">
+		<button class="mat-small-button" mat-icon-button (click)='previous()'>
+			<mat-icon color="primary" aria-label="Previous">navigate_before</mat-icon>
+		</button>
+		<div style="width:160px;text-align:center;margin-top:4px">
+			Starting - {{dates[0].dateFormatted}}
+		</div>
+		<button class="mat-small-button" mat-icon-button (click)='next()'>
+			<mat-icon color="primary" aria-label="Next">navigate_next</mat-icon>
+		</button>
+	</div>
+	<div fxFlex="120px">
+		Position(s):
+	</div>
+	<div fxFlex="200px">
+		<checklist [dataSource]="lookups?.positions" [selectedItems]="selectedPositions" (selectionChanged)="refreshSchedule()" displayMember="positionName"></checklist>
+	</div>
+	<div fxFlex="10px"></div>
+	<div fxFlex="grow" style="text-align:center">
+		<div class="error-label" style="font-size:15pt" *ngIf="!weekIsPublished">Unpublished</div>
+	</div>
+	<div fxFlex="300px" style="font-size:10px" fxLayoutAlign="end">
+		<button mat-button (click)="refreshSchedule()" style="min-width:30px">
+			<mat-icon color="primary" aria-label="R" matTooltip="Refresh">cached</mat-icon>
+		</button>
+		<button mat-button (click)="toggleDragList()">
+			<span>Unscheduled</span>
+			<mat-icon color="primary" style="height:20px" aria-label="Expand" *ngIf="!showDragList">expand_more</mat-icon>
+			<mat-icon color="primary" style="height:20px" aria-label="Collapse" *ngIf="showDragList">expand_less</mat-icon>
+		</button>
+		<button mat-button [matMenuTriggerFor]="mnuMain">
+			<mat-icon color="primary" aria-label="Menu">menu</mat-icon>
+			<span>Menu</span>
+		</button>
+		<mat-menu #mnuMain="matMenu">
+			<button mat-menu-item (click)='publishSchedules()' *ngIf="!weekIsPublished">
+				<mat-icon color="primary" aria-label="Refresh">how_to_vote</mat-icon>
+				<span>Publish Schedules</span>
+			</button>
+			<button mat-menu-item (click)='bulkSchedule()'>
+				<mat-icon color="primary" aria-label="Refresh">add_circle_outline</mat-icon>
+				<span>Add Bulk Schedule(s)</span>
+			</button>
+			<button mat-menu-item (click)='printPdf()'>
+				<mat-icon color="primary" aria-label="Refresh">local_printshop</mat-icon>
+				<span>Print Schedule</span>
+			</button>
+			<button mat-menu-item (click)="sendSchedules(null, false)">
+				<mat-icon color="primary" aria-label="Send Schedules">mail_outline</mat-icon>
+				<span>Email</span>
+			</button>
+			<button mat-menu-item (click)="sendSchedules(null, true)">
+				<mat-icon color="primary" aria-label="Text Schedules">vibration</mat-icon>
+				<span>Text Message</span>
+			</button>
+			<button mat-menu-item (click)="saveTemplate()" *ngIf="hasRole(role.ADMIN.value) || hasRole(role.SCHEDULING.value)">
+				<mat-icon color="primary" aria-label="Save">save</mat-icon>
+				<span>Save Template</span>
+			</button>
+			<button mat-menu-item (click)="loadTemplate(false)">
+				<mat-icon color="primary" aria-label="Load">system_update_alt</mat-icon>
+				<span>Load Template</span>
+			</button>
+			<button mat-menu-item (click)="copyPrevious()">
+				<mat-icon color="primary" aria-label="Load">content_copy</mat-icon>
+				<span>Copy Previous</span>
+			</button>
+			<button mat-menu-item (click)='deleteSchedules(false)'>
+				<mat-icon color="primary" aria-label="Refresh">remove_circle_outline</mat-icon>
+				<span>Delete Schedule(s)</span>
+			</button>
+			<button mat-menu-item (click)='deleteSchedules(true)'>
+				<mat-icon color="primary" aria-label="Refresh">not_interested</mat-icon>
+				<span>Delete Unscheduled</span>
+			</button>
+			<button mat-menu-item (click)="helpModal.show()">
+				<mat-icon color="primary" aria-label="Help">help_outline</mat-icon>
+				<span>Help</span>
+			</button>
+
+		</mat-menu>
+	</div>
+</div>
+<div style="height:calc(100vh - 170px);min-width:1000px;min-height:600px">
+	<table class="header-table">
+		<tr>
+			<th style="width: 12.5%"></th>
+			<th *ngFor="let dt of dates" style="width: 12.5%">{{dt.dayName}}
+				<br />{{dt.dateFormatted}}
+			</th>
+		</tr>
+	</table>
+	<split direction="vertical">
+		<split-area class="unscheduled-grid" size="30" [visible]="showDragList" [order]="0">
+			<table>
+				<tr *ngFor="let r of unscheduledRowNumbers" style="height:35px">
+					<td style="width: 12.5%"></td>
+					<td *ngFor="let dt of dates" style="width: 12.5%" dnd-droppable (onDropSuccess)="dropOnSchedule($event, dt, null)">
+						<div *ngIf="unscheduled[dt.dateFormatted] && unscheduled[dt.dateFormatted][r] && unscheduled[dt.dateFormatted][r].scheduleItems.length"
+						 class="drag-item">
+							<schedule-date-item (tradeSchedule)="tradeSchedule($event)" [scheduleDateItem]="unscheduled[dt.dateFormatted][r]" (editSchedule)="editSchedule($event)"
+							 [lookups]="lookups" (removeSchedule)="removeSchedule($event)" (saveSchedule)="saveSchedule($event)" (cancelSchedule)="cancelSchedule($event)"
+							 (addSchedule)="addSchedule(u, dt)" [unscheduled]="true"></schedule-date-item>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</split-area>
+		<split-area size="70" class="schedule-grid" [order]="1" #splitSchedules (drag)="dragHandler($event)">
+			<table>
+				<!-- <tr>
+					<th style="width: 12.5%">Employee</th>
+					<th *ngFor="let dt of dates" style="width: 12.5%">{{dt.dayName}}
+						<br />{{dt.dateFormatted}}
+						<div style="top:0;right:0;float:right;margin-right:4px">
+							<button class="icon-remove-black icon-small icon-button" (click)="removeDate(dt)"></button>
+						</div>
+					</th>
+				</tr> -->
+				<tr *ngFor="let u of scheduleUsers">
+					<td style="width: 12.5%">
+						<span [style.color]="u.position?.textColor || 'black'">
+							<strong>{{u.displayName}} - {{u.position?.positionName}}</strong>
+						</span>
+						<div *ngIf="usersSchedules[u.userId] && usersSchedules[u.userId].scheduleIds.length > 0">
+							({{usersSchedules[u.userId].totalHours}} Hours)
+							<br />
+							<button mat-button [matMenuTriggerFor]="mnuEmailEmployee">
+								<mat-icon color="primary" aria-label="Send Schedules">mail_outline</mat-icon>
+							</button>
+							<mat-menu #mnuEmailEmployee="matMenu">
+								<button mat-menu-item (click)="sendSchedules(usersSchedules[u.userId].scheduleIds)">Email</button>
+								<button mat-menu-item (click)="sendSchedules(usersSchedules[u.userId].scheduleIds, true)">Text Message</button>
+							</mat-menu>
+						</div>
+					</td>
+					<td *ngFor="let dt of dates" dnd-droppable (onDropSuccess)="dropOnSchedule($event, dt, u)" style="width: 12.5%; vertical-align: top">
+						<schedule-date-item *ngIf="usersSchedules[u.userId]" [scheduleDateItem]="usersSchedules[u.userId].dates[dt.dateFormatted]"
+						 [lookups]="lookups" (removeSchedule)="removeSchedule($event)" (saveSchedule)="saveSchedule($event)" (cancelSchedule)="cancelSchedule($event)"
+						 (addSchedule)="addSchedule(u, dt)" (sendSchedules)="sendSchedules($event.scheduleIds, $event.isText)"></schedule-date-item>
+					</td>
+				</tr>
+			</table>
+		</split-area>
+	</split>
+</div>
+<overlay [loading]="loading"></overlay>
+<br />
+<modal-dialog #scheduleTemplatesModal [showBackdrop]='true' headerText='Load Template' [showFooter]="false">
+	<schedule-templates [scheduleTemplatesModal]="scheduleTemplatesModal" (scheduleTemplateSelected)="scheduleTemplateSelected($event)"
+	 (scheduleTemplateDelete)="scheduleTemplateDelete($event)" [scheduleTemplates]="scheduleTemplates" [canDelete]="hasRole(role.ADMIN.value) || hasRole(role.SCHEDULING.value)">
+	</schedule-templates>
+</modal-dialog>
+<modal-dialog #scheduleTemplateModal [showBackdrop]='true' headerText='Save Template' [showFooter]="false" [hideCloseButton]="true">
+	<schedule-template [scheduleTemplateModal]="scheduleTemplateModal" [schedules]="schedules" [apiUrl]="apiUrl">
+	</schedule-template>
+</modal-dialog>
+<modal-dialog #bulkScheduleModal [showBackdrop]='true' headerText='Schedule' [showFooter]="false" [hideCloseButton]="true">
+	<schedule-bulk #bulkScheduleComponent [lookups]="lookups" [bulkScheduleModal]="bulkScheduleModal" [startDate]="startDate"
+		[weekIsPublished]="weekIsPublished">
+	</schedule-bulk>
+</modal-dialog>
+<modal-dialog #helpModal [showBackdrop]='true' headerText='Help' [showFooter]="false">
+	<div class="modal-dialog-content">
+		<div fxLayout="row">
+			<div fxFlex="32px">
+				<mat-icon class="mat-icon-small" color="primary" aria-label="Availability Info">info_outline</mat-icon>
+			</div>
+			<div fxFlex="grow" style="margin-top: 2px;">
+				<span>Availability info for selected date and employee</span>
+			</div>
+		</div>
+		<br />
+		<div fxLayout="row">
+			<div fxFlex="32px">
+				<mat-icon class="mat-icon-small" color="success" aria-label="Pending Items">help_outline</mat-icon>
+			</div>
+			<div fxFlex="grow" style="margin-top: 2px;">
+				<span>Employee has availability and/or time off requests for selected date which need to be approved/denied</span>
+			</div>
+		</div>
+		<br />
+		<div fxLayout="row">
+			<div fxFlex="32px">
+				<mat-icon class="mat-icon-small" color="warn" aria-label="No Availability">error_outline</mat-icon>
+			</div>
+			<div fxFlex="grow" style="margin-top: 2px;">
+				<span>Employee has no availability specified for selected date</span>
+			</div>
+		</div>
+		<br />
+		<div fxLayout="row">
+			<div fxFlex="32px">
+				<mat-icon class="mat-icon-small" color="warn" aria-label="Out Of Office">not_interested</mat-icon>
+			</div>
+			<div fxFlex="grow" style="margin-top: 2px;">
+				<span>User has time off approved for selected date</span>
+			</div>
+		</div>
+		<br />
+		<div fxLayout="row">
+			<div fxFlex="32px">
+				<mat-icon class="mat-icon-small" style="color:teal" aria-label="Email Schedule">mail_outline</mat-icon>
+			</div>
+			<div fxFlex="grow" style="margin-top: 2px;">
+				<span>Email or text schedule to selected employee(s) for selected date(s)</span>
+			</div>
+		</div>
+		<br />
+		<div fxLayout="row">
+			<div fxFlex="32px">
+				<mat-icon class="mat-icon-small" color="primary" aria-label="Swap">swap_horiz</mat-icon>
+			</div>
+			<div fxFlex="grow" style="margin-top: 2px;">
+				<span>Post schedule on trade board</span>
+			</div>
+		</div>
+	</div>
+</modal-dialog>

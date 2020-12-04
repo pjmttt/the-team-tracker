@@ -1,0 +1,62 @@
+.daily-schedule table {
+	width: 100%;
+	font-size: 12px;
+	margin-bottom: 50px
+}
+
+.daily-schedule th, .daily-schedule td {
+	table-layout: fixed;
+	height: 22px;
+}
+
+.daily-schedule td {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.daily-schedule th {
+	border: 1px solid #dddddd;
+	padding-left: 6px;
+}
+
+.email-container {
+	float: right;
+	cursor: pointer;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.email-container span {
+	vertical-align: top;
+}
+
+.daily-schedule .active {
+	opacity: 0.8;
+}
+
+.daily-schedule .active,
+.daily-schedule .increment_0, 
+.daily-schedule .increment_1, 
+.daily-schedule .increment_2, 
+.daily-schedule .increment_3 {
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+.daily-schedule .increment_0 {
+	border-left: 1px solid black;
+}
+
+.daily-schedule .increment_1 {
+	border-left: 1px solid #dddddd;
+}
+
+.daily-schedule .increment_2 {
+	border-left: 1px solid #c2c2c2;
+}
+
+
+.daily-schedule .increment_3 {
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid black;
+}

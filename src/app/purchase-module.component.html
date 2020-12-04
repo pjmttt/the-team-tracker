@@ -1,0 +1,79 @@
+<div class="purchase-container">
+	<div *ngIf='module==0'>
+		<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+			<div fxFlex="100px">
+				<mat-icon>assignment_ind</mat-icon>
+			</div>
+			<div fxFlex="grow">
+				<div class="info-label">Daily Duties</div>
+				Monitor employee daily duties with automatic feedback to help guide their progress.
+			</div>
+			<div fxFlex="100px"></div>
+			<div fxFlex="100px">
+				<mat-icon>people</mat-icon>
+			</div>
+			<div fxFlex="grow">
+				<div class="info-label">Attendance</div>
+				Track staff attendance to help keep them accountable.
+			</div>
+		</div>
+	</div>
+	<div *ngIf='module==1'>
+		<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+			<div fxFlex="100px">
+				<mat-icon>today</mat-icon>
+			</div>
+			<div fxFlex="grow">
+				<div class="info-label">Scheduling</div>
+				Manage employee schedules, notify, and give them the flexibility to trade at the touch of a button.
+			</div>
+			<div fxFlex="100px" fxHide fxShow.gt-xs></div>
+			<div fxFlex="100px">
+				<mat-icon>flight_takeoff</mat-icon>
+			</div>
+			<div fxFlex="grow">
+				<div class="info-label">Time Off</div>
+				Allow employees to request time off and post their availability to aid the scheduling process.
+			</div>
+		</div>
+		<br />
+		<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+			<div fxFlex="100px">
+				<mat-icon>schedule</mat-icon>
+			</div>
+			<div fxFlex="grow">
+				<div class="info-label">Time Clocking</div>
+				Allow staff to clock in and out with the touch of a button when they are within your workplace.
+			</div>
+			<div fxFlex="100px" fxHide fxShow.gt-xs></div>
+			<div fxFlex="100px">
+			</div>
+			<div fxFlex="grow">
+			</div>
+		</div>
+	</div>
+	<div *ngIf='module==2'>
+		<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+			<div fxFlex="100px">
+				<mat-icon>shopping_basket</mat-icon>
+			</div>
+			<div fxFlex="grow">
+				<div class="info-label">Inventory</div>
+				Keep tabs on inventory and know exactly what you need to supply your business.
+			</div>
+		</div>
+	</div>
+	<div *ngIf='module==3'>
+		<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+			<div fxFlex="100px">
+				<mat-icon>build</mat-icon>
+			</div>
+			<div fxFlex="grow">
+				<div class="info-label">Maintenance</div>
+				Track needed maintenance throughout your business with instant notifications.
+			</div>
+		</div>
+	</div>
+	<br /><br />
+	<h3>Click <a href="#">here</a> to add this module</h3>
+</div>

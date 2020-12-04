@@ -1,0 +1,44 @@
+<div *ngIf="user" style="margin-left:auto;margin-right:auto;max-width:500px">
+	<strong>You have {{user.runningScore || 0}} points</strong>
+	<br />
+	<br />
+	<form #form="ngForm" autocomplete="off">
+		<mat-form-field class="full-width">
+			<input id="firstName" name="firstName" matInput [(ngModel)]="user.firstName" placeholder="First Name" required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="middleName" name="middleName" matInput [(ngModel)]="user.middleName" placeholder="Middle Name" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="lastName" name="lastName" matInput [(ngModel)]="user.lastName" placeholder="Last Name" required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="phoneNumber" name="phoneNumber" matInput [(ngModel)]="user.phoneNumber" placeholder="Phone Number" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="cellPhoneCarrier" name="cellPhoneCarrier" matInput [(ngModel)]="user.cellPhoneCarrierId" placeholder="Cell Carrier"
+			 typeahead [dataSource]="cellPhoneCarriers" valueMember="cellPhoneCarrierId" displayMember="carrierName" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="email" name="email" matInput [(ngModel)]="user.email" placeholder="Email" (ngModelChange)="emailChanged=true" required />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="password" name="password" matInput [(ngModel)]="password" placeholder="Password" type="password" />
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input id="passwordConfirm" name="passwordConfirm" matInput [(ngModel)]="passwordConfirm" placeholder="Confirm Password"
+			 type="password" />
+		</mat-form-field>
+		<br /> <label class="checkbox-label">Email Notifications: <input name="enableEmailNotifications" type="checkbox" [(ngModel)]="user.enableEmailNotifications" /></label>
+		<br /> <checklist *ngIf="user.enableEmailNotifications" [dataSource]="notifications" [selectedItems]="selectedEmailNotifications" displayMember="label"></checklist>
+		<br /> <br /> <label class="checkbox-label">Text Notifications: <input name="enableEmailNotifications" type="checkbox" [(ngModel)]="user.enableTextNotifications" /></label>
+		<br /> <checklist *ngIf="user.enableTextNotifications" [dataSource]="notifications" [selectedItems]="selectedTextNotifications" displayMember="label"></checklist>
+	</form>
+	<br />
+	<div fxLayoutAlign="end">
+		<button mat-raised-button color="primary" (click)="save()">Save</button>
+	</div>
+</div>
+<br />
+<br />
+<overlay [loading]="loading"></overlay>

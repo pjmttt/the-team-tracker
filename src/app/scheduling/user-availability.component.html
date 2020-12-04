@@ -1,0 +1,14 @@
+<div class="small-container">
+	<div class="header">{{forUser ? 'My ' : ''}}Availability</div>
+	<div *ngIf="!forUser">
+		<label class="checkbox-label">
+			<input class="checkbox-input" type="checkbox" [(ngModel)]="disableNotifications" /> Disable Notifications</label>
+	</div>
+	<div style="min-width:780px">
+		<gridview-container #gridViewContainer [grid]="gridMain" (refreshGrid)="refreshGrid()" [loading]="loading"></gridview-container>
+	</div>
+</div>
+<modal-dialog #bulkModal [showBackdrop]='true' headerText='Availability' [showFooter]="false" [hideCloseButton]="true">
+	<user-availability-bulk #bulkComponent [lookups]="lookups" [bulkModal]="bulkModal">
+	</user-availability-bulk>
+</modal-dialog>

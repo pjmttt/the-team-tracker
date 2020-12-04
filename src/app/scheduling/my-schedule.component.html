@@ -1,0 +1,63 @@
+<div>
+	<div class="email-container">
+		<button mat-button [matMenuTriggerFor]="mnuSend">
+			<mat-icon color="primary" aria-label="Send Schedules">mail_outline</mat-icon>
+			<span>Send Schedules</span>
+		</button>
+		<mat-menu #mnuSend="matMenu">
+			<button mat-menu-item (click)="sendSchedules(false)">Email</button>
+			<button mat-menu-item (click)="sendSchedules(true)">Text Message</button>
+		</mat-menu>
+	</div>
+	<div style="display:flex">
+		<button class="mat-small-button" mat-icon-button (click)='previous()'>
+			<mat-icon color="primary" aria-label="Previous">navigate_before</mat-icon>
+		</button>
+		<div style="width:180px;text-align:center">
+			Week starting - {{dates[0].dateFormatted}}
+		</div>
+		<button class="mat-small-button" mat-icon-button (click)='next()'>
+			<mat-icon color="primary" aria-label="Next">navigate_next</mat-icon>
+		</button>
+		<br />
+		<br />
+	</div>
+	<div style="height:calc(100vh - 155px);min-width:1100px">
+		<table>
+			<tr>
+				<th style="width:12.5px"></th>
+				<th *ngFor="let dt of dates" style="width: 12.5%">{{dt.dayName}}
+					<br />{{dt.dateFormatted}}</th>
+			</tr>
+			<tr *ngFor="let inc of increments; let i=index">
+				<td style="text-align: right;padding-right:20px" [ngClass]="i % 2 == 0 || configService.isMobile ? 'even-item' : 'odd-item'">
+					<div *ngIf="i % 2 == 0 || configService.isMobile">{{inc}}</div>
+				</td>
+				<td *ngFor="let dt of dates" [ngClass]="displaySchedules[dt.dayName] && displaySchedules[dt.dayName][inc] ? '' : (i % 2 == 0 || configService.isMobile ? 'even-item' : 'odd-item')">
+					<div class="scheduled-item" [style.backgroundColor]="displaySchedules[dt.dayName][inc].color" *ngIf="displaySchedules[dt.dayName] && displaySchedules[dt.dayName][inc] && displaySchedules[dt.dayName][inc].index > 0">
+						<div *ngIf="displaySchedules[dt.dayName][inc].index == 1">
+							<div fxLayout="row">
+								<div fxFlex="75%">
+									{{formatTime(displaySchedules[dt.dayName][inc].schedule.startTime)}} - {{formatTime(displaySchedules[dt.dayName][inc].schedule.endTime)}}
+								</div>
+								<div fxFlex="25%" fxLayoutAlign="end" *ngIf="!displaySchedules[dt.dayName][inc].upForTrade">
+									<button class="mat-x-small-button" mat-icon-button (click)="tradeSchedule(displaySchedules[dt.dayName][inc], dt.dayName)">
+										<mat-icon style="color:white" aria-label="Swap">swap_horiz</mat-icon>
+									</button>
+								</div>
+								<div fxFlex="25%" fxLayoutAlign="end" *ngIf="displaySchedules[dt.dayName][inc].upForTrade">
+									<!-- <mat-icon class="mat-xx-small-button" style="color:white;margin-top:2px;" aria-label="Pending">hourglass_empty</mat-icon> -->
+									<mat-icon class="mat-xx-small-button" style="color:white;margin-top:2px;" aria-label="Pending">hourglass_empty</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="displaySchedules[dt.dayName][inc].index == 2">
+							{{displaySchedules[dt.dayName][inc].schedule.shift?.shiftName}} - {{displaySchedules[dt.dayName][inc].schedule.task?.taskName}}
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<overlay [loading]="loading"></overlay>
+</div>

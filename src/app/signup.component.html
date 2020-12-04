@@ -1,0 +1,56 @@
+<form #form="ngForm">
+	<h2>Signup</h2>
+	<mat-form-field class="full-width">
+		<input id="firstName" name="firstName" matInput [(ngModel)]="user.firstName" placeholder="First Name" required />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="lastName" name="lastName" matInput [(ngModel)]="user.lastName" placeholder="Last Name" required />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="company" name="companyName" matInput [(ngModel)]="company.companyName" placeholder="Company Name" required />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="street1" name="streetAddress1" matInput [(ngModel)]="company.streetAddress1" placeholder="Street 1" />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="street2" name="streetAddress2" matInput [(ngModel)]="company.streetAddress2" placeholder="Street 2" />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="city" name="city" matInput [(ngModel)]="company.city" placeholder="City" />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="stateProvince" name="stateProvince" matInput [(ngModel)]="company.stateProvince" placeholder="State / Province"
+		/>
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="postalCode" name="postalCode" matInput [(ngModel)]="company.postalCode" placeholder="Zip / Postal Code" />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="country" name="country" matInput [(ngModel)]="company.country" placeholder="Country" />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="timezone" name="timezone" typeahead [dataSource]="timezones" matInput placeholder="Time Zone" [(ngModel)]="company.timezone"
+		 required />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="phoneNumber" name="phoneNumber" matInput [(ngModel)]="user.phoneNumber" placeholder="Phone Number" />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="email" name="email" matInput [(ngModel)]="user.email" placeholder="Email" required />
+	</mat-form-field>
+	<!-- <mat-form-field class="full-width">
+		<input id="userName" name="userName" matInput [(ngModel)]="user.userName" placeholder="User Name" required />
+	</mat-form-field> -->
+	<mat-form-field class="full-width">
+		<input id="password" name="password" matInput [(ngModel)]="password" placeholder="Password" type="password" required />
+	</mat-form-field>
+	<mat-form-field class="full-width">
+		<input id="passwordConfirm" name="passwordConfirm" matInput [(ngModel)]="passwordConfirm" placeholder="Confirm Password"
+		 type="password" required />
+	</mat-form-field>
+	<!-- <mat-form-field class="full-width">
+		<input id="promoCode" name="promoCode" matInput [(ngModel)]="company.promoCode" placeholder="Promo Code" />
+	</mat-form-field> -->
+	<button mat-raised-button id="signup" color="primary" (click)="signup()">Next</button>
+</form>
+<overlay [loading]="loading"></overlay>

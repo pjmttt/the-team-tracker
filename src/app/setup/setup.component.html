@@ -1,0 +1,17 @@
+<div class="small-container">
+	<div class="header">{{pluralTitle}}</div>
+	<div *ngIf="wizard">{{wizardText}}</div>
+	<div [style.minWidth]="minWidth">
+		<gridview-container [grid]="gridMain" (refreshGrid)="refreshGrid(false)" [loading]="loading" [hidePrintButton]="hidePrintButton" [hideButtons]="hideButtons">
+		</gridview-container>
+	</div>
+	<br /><br /><br />
+	<div *ngIf="wizard" fxLayout="row">
+		<div *ngIf="wizardBackUrl" fxFlex="50%" style="margin-top:10px">
+			<button mat-raised-button color="primary" (click)="back()">Back</button>
+		</div>
+		<div *ngIf="wizardNextUrl" fxFlex="50%" fxLayoutAlign="end" style="margin-top:10px">
+			<button mat-raised-button color="primary" (click)="next()">Next</button>
+		</div>
+	</div>
+</div>

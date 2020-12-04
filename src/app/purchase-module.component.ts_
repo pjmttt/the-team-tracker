@@ -1,0 +1,16 @@
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+	selector: 'purchase-module',
+	templateUrl: './purchase-module.component.html',
+	styleUrls: ['./purchase-module.component.css']
+})
+export class PurchaseModuleComponent {
+	module: any;
+	constructor(private route: ActivatedRoute) {
+		route.params.subscribe(p => {
+			this.module = p.module;
+		});
+	}
+}

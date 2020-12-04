@@ -1,0 +1,53 @@
+<div fxLayout="row">
+	<div fxLayout="row" fxFlex="75%">
+		<button class="mat-small-button" mat-icon-button (click)='previous()'>
+			<mat-icon color="primary" aria-label="Previous">navigate_before</mat-icon>
+		</button>
+		<div style="width:180px;text-align:center;margin-top:4px">
+			Week starting - {{dates[0].dateFormatted}}
+		</div>
+		<button class="mat-small-button" mat-icon-button (click)='next()'>
+			<mat-icon color="primary" aria-label="Next">navigate_next</mat-icon>
+		</button>
+	</div>
+</div>
+<table class="schedule-grid" style="min-width:900px">
+	<tr>
+		<th style="width: 12.5%">Employee</th>
+		<th *ngFor="let dt of dates" style="width: 12.5%">{{dt.dayName}}
+			<br />{{dt.dateFormatted}}
+		</th>
+	</tr>
+	<tr *ngFor="let u of filteredUsers">
+		<td style="width: 12.5%">
+			{{u.displayName}}
+		</td>
+		<td *ngFor="let dt of dates" style="width: 12.5%; vertical-align: top">
+			<div *ngIf=" usersSchedules[u.userId]">
+				<div *ngFor="let sched of usersSchedules[u.userId][dt.dateFormatted]" style="display:flex" class="schedule-container schedule-item schedule-label">
+					<div [style.width]="'calc(100% - 20px)'" [style.marginTop]="canSchedule ? '18px' : '8px'">
+						{{sched.startEnd}}
+						<br /> {{sched.scheduleTrade.schedule.shift.shiftName}} - {{sched.scheduleTrade.schedule.task.taskName}}
+					</div>
+					<div style="width:20px">
+						<button class="mat-xx-small-button" *ngIf="canSchedule" matTooltip="Delete" mat-icon-button (click)="deleteTrade(sched.scheduleTrade)">
+							<mat-icon color="primary" class="mat-icon-small" aria-label="Delete">clear</mat-icon>
+						</button>
+						<button class="mat-xx-small-button" mat-icon-button matTooltip="Swap" (click)="tradeSchedule(sched.scheduleTrade)">
+							<mat-icon color="primary" class="mat-icon-small" aria-label="Swap">done_all</mat-icon>
+						</button>
+						<button class="mat-xx-small-button" mat-icon-button matTooltip="Trade Only" (click)="pickupSchedule(sched.scheduleTrade)">
+							<mat-icon color="primary" class="mat-icon-small" aria-label="Pickup">done</mat-icon>
+						</button>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+<overlay [loading]="loading"></overlay>
+<modal-dialog #mySchedulesDialog [showBackdrop]='true' headerText='Select Schedule' [showFooter]="false">
+	<div class="modal-dialog-body">
+		<gridview [grid]="mySchedulesGrid"></gridview>
+	</div>
+</modal-dialog>

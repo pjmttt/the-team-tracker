@@ -1,0 +1,19 @@
+<div>
+	<div class="header">{{forUser ? 'My ' : ''}}Attendance</div>
+	<div fxLayout="row" fxLayoutGap="15px" *ngIf="lookups && !forUser">
+		<div fxFlex="25%" fxFlex.lt-md="50%">
+			Employee(s):
+			<br />
+			<checklist [dataSource]="lookups.users" [selectedItems]="selectedUsers" (selectionChanged)="filterChanged()" displayMember="displayName"></checklist>
+		</div>
+		<div fxFlex="25%" fxFlex.lt-md="50%">
+			Reason(s):
+			<br />
+			<checklist [dataSource]="lookups.attendanceReasons" [selectedItems]="selectedReasons" (selectionChanged)="filterChanged()"
+			 displayMember="reasonName"></checklist>
+		</div>
+	</div>
+	<div style="min-width: 630px">
+		<gridview-container [grid]="gridAttendances" (refreshGrid)="refreshGrid(false)" [loading]="loading" [hideButtons]="forUser"></gridview-container>
+	</div>
+</div>

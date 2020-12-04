@@ -1,0 +1,15 @@
+<div class="small-container">
+	<div class="header">{{forUser ? 'My ' : ''}}Progress Checklists</div>
+	<div *ngIf="!forUser">
+		<div fxLayout="row" fxLayoutGap="15px" *ngIf="lookups">
+			<div fxFlex="300px">
+				Employee:
+				<br />
+				<checklist [dataSource]="lookups.users" [selectedItems]="selectedUsers" (selectionChanged)="filterChanged()" displayMember="displayName"></checklist>
+			</div>
+		</div>
+	</div>
+	<div style="min-width:740px">
+		<gridview-container [grid]="gridMain" (refreshGrid)="refreshGrid()" [loading]="loading" [hidePrintButton]="true" [hideButtons]="forUser"></gridview-container>
+	</div>
+</div>

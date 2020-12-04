@@ -1,0 +1,81 @@
+.mat-toolbar {
+	background-color: #1976d2;
+	color: white;
+	margin-left: 0px;
+}
+
+a {
+	color: white;
+}
+
+.content {
+	margin-top: 16px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+	margin-bottom: 30px;
+	height:calc(100% - 60px);
+}
+
+ .nav-user {
+	 font-size: 13px;
+ }
+
+.nav-user button {
+	padding-left: 0px;
+    padding-right: 0px;
+    min-width: 60px;
+    width: 60px;
+}
+
+.nav-login button {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+.nav-spacer {
+	flex: 1 1 auto;
+ }
+
+ .nav-bar {
+	 background-color: #1976d2 !important;
+	 color: #fff !important;
+ }
+
+ .header-menu button  {
+	 padding: 0px;
+	 font-size: 12px;
+ }
+
+ @media (max-width: 600px) {
+ .side-menu {
+	top: 56px !important;
+ }
+}
+
+@media print {
+	mat-sidenav-content, mat-sidenav-container {
+		overflow: visible !important;
+	}
+
+	.content {
+		margin-top: 0px !important;
+		top: 0px !important;
+	}
+
+	.side-menu {
+		top: 0px !important;
+	}
+}
+
+ .side-menu {
+	position: absolute;
+	top: 64px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  }
+  
+  .mat-drawer-container {
+	  background-color: #fff;
+  }
