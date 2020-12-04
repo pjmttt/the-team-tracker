@@ -1,5 +1,0 @@
-{
-	"apiUrl": "http://localhost:3000/api",
-	"development": true,
-	"pingFrequency": 30
-}
